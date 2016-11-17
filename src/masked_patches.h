@@ -23,6 +23,7 @@ namespace pm {
     public:
 
         typedef vector<Vec2i>::const_iterator const_iterator;
+        typedef vector<Vec2i>::const_reverse_iterator const_reverse_iterator;
 
         MaskedPatches(const Mat_<bool> mask, int P) : P(P), patches_mask(mask.size(), false) {
             int p_2 = P / 2;
@@ -43,6 +44,14 @@ namespace pm {
 
         const_iterator end() const {
             return patches.end();
+        }
+
+        const_reverse_iterator rbegin() const {
+            return patches.rbegin();
+        }
+
+        const_reverse_iterator rend() const {
+            return patches.rend();
         }
 
         const Vec2i &operator[](int i) const {
