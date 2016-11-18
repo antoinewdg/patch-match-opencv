@@ -1,6 +1,3 @@
-//
-// Created by antoinewdg on 11/15/16.
-//
 #include <iostream>
 
 #include "catch.hpp"
@@ -8,13 +5,14 @@
 #include "opencv2/highgui/highgui.hpp"
 
 #include "masked_patches.h"
+#include "test_utils.h"
 
 using namespace pm;
 
 using std::string;
 
 Mat_<bool> load_mask(string name) {
-    Mat_<bool> im = cv::imread("../test/assets/masked_patches/" + name + ".png", cv::IMREAD_GRAYSCALE);
+    Mat_<bool> im = load_test_asset<bool>("masked_patches/" + name + ".png", cv::IMREAD_GRAYSCALE);
     return im / 255;
 }
 
