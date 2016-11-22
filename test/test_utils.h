@@ -6,7 +6,7 @@
 #define PATCH_MATCH_UTILS_H
 
 
-#include "opencv2/imgcodecs/imgcodecs.hpp"
+#include <opencv2/imgcodecs/imgcodecs.hpp>
 
 template<class T = cv::Vec3b>
 inline cv::Mat_<T> load_test_asset(std::string name, int flag = cv::IMREAD_COLOR) {

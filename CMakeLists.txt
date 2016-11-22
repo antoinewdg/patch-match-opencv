@@ -5,7 +5,7 @@ set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11")
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/bin")
 
 set(SOURCE_FILES
-        src/masked_patches.h
+        src/patch_servers/masked_patches.h
         src/patch_distances.h
         src/patch_servers/pixel_iterators.h
         src/patch_servers/whole_image_patches.h
@@ -13,9 +13,9 @@ set(SOURCE_FILES
 
 set(TEST_FILES
         test/test_utils.h
-        test/test_masked_patches.cpp
         test/test_patch_distances.cpp
         test/patch_servers/test_whole_image_patches.cpp
+        test/patch_servers/test_masked_patches.cpp
         )
 
 

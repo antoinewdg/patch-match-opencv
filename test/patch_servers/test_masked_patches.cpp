@@ -1,10 +1,8 @@
 #include <iostream>
 
 #include "catch.hpp"
-#include "opencv2/imgcodecs/imgcodecs.hpp"
-#include "opencv2/highgui/highgui.hpp"
 
-#include "masked_patches.h"
+#include "patch_servers/masked_patches.h"
 #include "test_utils.h"
 
 using namespace pm;
