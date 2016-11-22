@@ -7,12 +7,15 @@ set(CMAKE_RUNTIME_OUTPUT_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/bin")
 set(SOURCE_FILES
         src/masked_patches.h
         src/patch_distances.h
+        src/patch_servers/pixel_iterators.h
+        src/patch_servers/whole_image_patches.h
         )
 
 set(TEST_FILES
         test/test_utils.h
         test/test_masked_patches.cpp
         test/test_patch_distances.cpp
+        test/patch_servers/test_whole_image_patches.cpp
         )
 
 
@@ -33,6 +36,11 @@ add_executable(run_tests test/main.cpp ${SOURCE_FILES} ${TEST_FILES})
 FIND_PACKAGE(OpenCV 3.1 REQUIRED)
 INCLUDE_DIRECTORIES(${OpenCV_INCLUDE_DIRS})
 set(TARGET_LIBS ${TARGET_LIBS} ${OpenCV_LIBS})
+
+find_package(Boost 1.36.0 REQUIRED)
+if (Boost_FOUND)
+    include_directories(${Boost_INCLUDE_DIRS})
+endif ()
 
 
 TARGET_LINK_LIBRARIES(patch_match ${TARGET_LIBS})
