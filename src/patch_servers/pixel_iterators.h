@@ -23,7 +23,7 @@ namespace pm {
     private:
         friend class boost::iterator_core_access;
 
-        void increment() {
+        inline void increment() {
             m_current[1]++;
             if (m_current[1] >= m_end[1]) {
                 m_current[0]++;
@@ -33,11 +33,11 @@ namespace pm {
             }
         }
 
-        bool equal(const ConstPixelIterator &other) const {
+        inline bool equal(const ConstPixelIterator &other) const {
             return m_current == other.m_current;
         }
 
-        const Vec2i &dereference() const {
+        inline const Vec2i &dereference() const {
             return m_current;
         }
 
@@ -53,7 +53,7 @@ namespace pm {
     private:
         friend class boost::iterator_core_access;
 
-        void increment() {
+        inline void increment() {
             m_current[1]--;
             if (m_current[1] < m_start[1]) {
                 m_current[0]--;
@@ -63,11 +63,11 @@ namespace pm {
             }
         }
 
-        bool equal(const ConstReversePixelIterator &other) const {
+        inline bool equal(const ConstReversePixelIterator &other) const {
             return m_current == other.m_current;
         }
 
-        const Vec2i &dereference() const {
+        inline const Vec2i &dereference() const {
             return m_current;
         }
 

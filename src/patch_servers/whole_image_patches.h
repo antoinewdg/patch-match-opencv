@@ -28,32 +28,32 @@ namespace pm {
 
         }
 
-        const_iterator begin() const {
+        inline const_iterator begin() const {
             return const_iterator(m_begin, m_end);
         }
 
-        const_iterator end() const {
+        inline const_iterator end() const {
             return const_iterator(m_end, m_end);
         }
 
-        const_reverse_iterator rbegin() const {
+        inline const_reverse_iterator rbegin() const {
             return const_reverse_iterator(m_begin, m_end);
         }
 
-        const_reverse_iterator rend() const {
+        inline const_reverse_iterator rend() const {
             return const_reverse_iterator(m_begin, m_begin);
         }
 
-        Vec2i operator[](int i) const {
+        inline Vec2i operator[](int i) const {
             int l = m_end[1] - m_begin[1];
             return Vec2i(i / l + m_begin[0], i % l + m_begin[1]);
         }
 
-        Size size() const {
+        inline Size size() const {
             return m_size;
         }
 
-        bool contains_patch(const Vec2i &p) {
+        inline bool contains_patch(const Vec2i &p) const {
             return true;
         }
 
