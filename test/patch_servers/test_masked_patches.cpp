@@ -25,9 +25,19 @@ TEST_CASE("Totally masked patches") {
     SECTION("contains_patch") {
         for (int i = 0; i < expected_mask.rows; i++) {
             for (int j = 0; j < expected_mask.cols; j++) {
-                REQUIRE(expected_mask(i, j) == patches.contains_patch(Vec2i(i, j)));
+                if (expected_mask(i, j) != patches.contains_patch(Vec2i(i, j))) {
+                    FAIL("" << "Expected mask is " << expected_mask(i, j)
+                            << " while actual mask is " << patches.contains_patch(Vec2i(i, j))
+                            << " at position " << Vec2i(i, j));
+                }
             }
         }
+
+        REQUIRE_FALSE(patches.contains_patch(Vec2i(-1,0)));
+        REQUIRE_FALSE(patches.contains_patch(Vec2i(0,-8)));
+        REQUIRE_FALSE(patches.contains_patch(Vec2i(-9,-87)));
+        REQUIRE_FALSE(patches.contains_patch(Vec2i(32,31)));
+        REQUIRE_FALSE(patches.contains_patch(Vec2i(56,-7)));
     }
 
     SECTION("iterator") {
@@ -50,7 +60,7 @@ TEST_CASE("Totally masked patches") {
     SECTION("reverse iterator") {
         Mat_<bool> constructed_mask(l_shaped_mask.size(), false);
         auto it = patches.rbegin();
-        for ( ; it != patches.rend() ; it++) {
+        for (; it != patches.rend(); it++) {
             constructed_mask(*it) = true;
         }
         auto are_matrix_equal = true;
@@ -65,15 +75,19 @@ TEST_CASE("Totally masked patches") {
 
     }
 
-    SECTION("operator[]") {
-        REQUIRE(patches[0] == Vec2i(7, 6));
-        REQUIRE(patches[64] == Vec2i(22, 8));
-    }
-
     SECTION("size") {
         REQUIRE(patches.size() == Size(32, 32));
     }
 
+    SECTION("pick_random") {
+        std::default_random_engine generator(448);
+        for (int i = 0; i < 100; i++) {
+            Vec2i p = patches.pick_random(generator);
+            if (!patches.contains_patch(p)) {
+                FAIL("Randomly generated patch " << p << " is not contained");
+            }
+        }
+    }
 }
 
 TEST_CASE("Partially masked patches") {
@@ -86,9 +100,19 @@ TEST_CASE("Partially masked patches") {
     SECTION("contains_patch") {
         for (int i = 0; i < expected_mask.rows; i++) {
             for (int j = 0; j < expected_mask.cols; j++) {
-                REQUIRE(expected_mask(i, j) == patches.contains_patch(Vec2i(i, j)));
+                if (expected_mask(i, j) != patches.contains_patch(Vec2i(i, j))) {
+                    FAIL("" << "Expected mask is " << expected_mask(i, j)
+                            << " while actual mask is " << patches.contains_patch(Vec2i(i, j))
+                            << " at position " << Vec2i(i, j));
+                }
             }
         }
+
+        REQUIRE_FALSE(patches.contains_patch(Vec2i(-1,0)));
+        REQUIRE_FALSE(patches.contains_patch(Vec2i(0,-8)));
+        REQUIRE_FALSE(patches.contains_patch(Vec2i(-9,-87)));
+        REQUIRE_FALSE(patches.contains_patch(Vec2i(32,31)));
+        REQUIRE_FALSE(patches.contains_patch(Vec2i(56,-7)));
     }
 
     SECTION("iterator") {
@@ -111,7 +135,7 @@ TEST_CASE("Partially masked patches") {
     SECTION("reverse iterator") {
         Mat_<bool> constructed_mask(l_shaped_mask.size(), false);
         auto it = patches.rbegin();
-        for ( ; it != patches.rend() ; it++) {
+        for (; it != patches.rend(); it++) {
             constructed_mask(*it) = true;
         }
         auto are_matrix_equal = true;
@@ -126,13 +150,18 @@ TEST_CASE("Partially masked patches") {
 
     }
 
-    SECTION("operator[]") {
-        REQUIRE(patches[0] == Vec2i(3, 2));
-        REQUIRE(patches[416] == Vec2i(26, 12));
-    }
-
     SECTION("size") {
         REQUIRE(patches.size() == Size(32, 32));
+    }
+
+    SECTION("pick_random") {
+        std::default_random_engine generator(448);
+        for (int i = 0; i < 100; i++) {
+            Vec2i p = patches.pick_random(generator);
+            if (!patches.contains_patch(p)) {
+                FAIL("Randomly generated patch " << p << " is not contained");
+            }
+        }
     }
 
 }

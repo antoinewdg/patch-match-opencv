@@ -46,12 +46,8 @@ namespace pm {
             offset_map = Mat_<Vec2i>(size, Vec2i(0, 0));
             distance_map = Mat_<distance_type>(size, distance_type(0));
 
-            int n_patches = t.size().width * t.size().height;
-            std::uniform_int_distribution<int> dist(0, n_patches - 1);
-
             for (const Vec2i &p : s) {
-                int index = dist(generator);
-                Vec2i q = t[index];
+                Vec2i q = t.pick_random(generator);
                 offset_map(p) = q - p;
                 distance_map(p) = patch_distance(p, q);
             }

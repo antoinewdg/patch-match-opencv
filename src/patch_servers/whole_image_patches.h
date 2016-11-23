@@ -7,6 +7,7 @@
 
 #include <boost/iterator/iterator_facade.hpp>
 #include <opencv2/core/core.hpp>
+#include <random>
 
 #include "pixel_iterators.h"
 
@@ -24,7 +25,9 @@ namespace pm {
         WholeImagePatches(const Size &size, int P) :
                 m_begin(P / 2, P / 2),
                 m_end(size.height - P / 2, size.width - P / 2),
-                m_size(size.width - P + 1, size.height - P + 1) {
+                m_size(size.width - P + 1, size.height - P + 1),
+                i_dist(m_begin[0], m_end[0] - 1),
+                j_dist(m_begin[1], m_end[1] - 1) {
 
         }
 
@@ -44,10 +47,11 @@ namespace pm {
             return const_reverse_iterator(m_begin, m_begin);
         }
 
-        inline Vec2i operator[](int i) const {
-            int l = m_end[1] - m_begin[1];
-            return Vec2i(i / l + m_begin[0], i % l + m_begin[1]);
+        template<class RandomEngine>
+        inline Vec2i pick_random(RandomEngine &generator) {
+            return Vec2i(i_dist(generator), j_dist(generator));
         }
+
 
         inline Size size() const {
             return m_size;
@@ -61,7 +65,7 @@ namespace pm {
     private:
         Vec2i m_begin, m_end;
         Size m_size;
-        int half_p;
+        std::uniform_int_distribution<int> i_dist, j_dist;
     };
 }
 

@@ -7,6 +7,8 @@
 
 using namespace pm;
 
+using cv::Mat_;
+
 TEST_CASE("WholeImagePatches 8x10 with P=5") {
 
     WholeImagePatches patches(Size(8, 10), 5);
@@ -34,14 +36,23 @@ TEST_CASE("WholeImagePatches 8x10 with P=5") {
         REQUIRE(it == patches.rend());
     }
 
-    SECTION("operator[]"){
-        REQUIRE(patches[0] == Vec2i(2,2));
-        REQUIRE(patches[6] == Vec2i(3,4));
-        REQUIRE(patches[23] == Vec2i(7,5));
+    SECTION("size") {
+        REQUIRE(patches.size() == Size(4, 6));
     }
 
-    SECTION("size"){
-        REQUIRE(patches.size() == Size(4, 6));
+    SECTION("pick_random") {
+        std::default_random_engine generator(9978);
+        Mat_<int> n_picked(6, 4, 0);
+        for (int i = 0; i < 100; i++) {
+            Vec2i p = patches.pick_random(generator);
+            n_picked(p - Vec2i(2,2))++;
+            if (!patches.contains_patch(p)) {
+                FAIL("Randomly generated patch " << p << " is not contained");
+            }
+        }
+
+        // There are at most two unpicked patches after 100 iterations
+        REQUIRE(24 -cv::countNonZero(n_picked) < 2);
     }
 
 }
