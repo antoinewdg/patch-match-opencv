@@ -55,4 +55,19 @@ TEST_CASE("WholeImagePatches 8x10 with P=5") {
         REQUIRE(24 -cv::countNonZero(n_picked) < 2);
     }
 
+    SECTION("get_max_window_size"){
+        REQUIRE(patches.get_max_window_size(Vec2i(2,2)) == 6);
+        REQUIRE(patches.get_max_window_size(Vec2i(5,4)) == 3);
+    }
+
+    SECTION("pick_random_in_window"){
+        std::default_random_engine generator(78410);
+        for(int i = 0 ; i < 100 ; i++){
+            Vec2i p = patches.pick_random_in_window(generator, Vec2i(0,0), 3);
+            if(std::abs(p[0]) > 3 || std::abs(p[1]) > 3){
+                FAIL( p << " is outside the window");
+            }
+        }
+    }
+
 }

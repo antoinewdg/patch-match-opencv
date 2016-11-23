@@ -21,6 +21,8 @@ namespace pm {
     public:
         typedef ConstPixelIterator const_iterator;
         typedef ConstReversePixelIterator const_reverse_iterator;
+        typedef Vec2i patch_type;
+        typedef int window_size_type;
 
         WholeImagePatches(const Size &size, int P) :
                 m_begin(P / 2, P / 2),
@@ -48,8 +50,17 @@ namespace pm {
         }
 
         template<class RandomEngine>
-        inline Vec2i pick_random(RandomEngine &generator) {
-            return Vec2i(i_dist(generator), j_dist(generator));
+        inline patch_type pick_random(RandomEngine &generator) {
+            return patch_type(i_dist(generator), j_dist(generator));
+        }
+
+        template<class RandomEngine>
+        inline patch_type pick_random_in_window(RandomEngine &generator,
+                                                const patch_type &c,
+                                                window_size_type r) {
+            std::uniform_int_distribution<int> k_dist(c[0] - r, c[0] + r);
+            std::uniform_int_distribution<int> l_dist(c[1] - r, c[1] + r);
+            return patch_type(k_dist(generator), l_dist(generator));
         }
 
 
@@ -57,10 +68,16 @@ namespace pm {
             return m_size;
         }
 
-        inline bool contains_patch(const Vec2i &p) const {
+        inline bool contains_patch(const patch_type &p) const {
             return p[0] >= m_begin[0] && p[0] < m_end[0] &&
                    p[1] >= m_begin[1] && p[1] < m_end[1];
         }
+
+        inline window_size_type get_max_window_size(const patch_type &c) {
+            return std::max({m_end[0] - c[0], m_end[1] - c[1],
+                             c[0] - m_begin[0], c[1] - m_begin[1]});
+        }
+
 
     private:
         Vec2i m_begin, m_end;

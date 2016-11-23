@@ -108,19 +108,11 @@ namespace pm {
 
         void _random_search(const Vec2i &p) {
             Vec2i q = (offset_map(p) + p);
-            int r = std::max(t.size().height, t.size().width);
+            int r = t.get_max_window_size(q);
             int &min_d = distance_map(p);
 
-            constexpr int p_2 = DistanceFunction::patch_size / 2;
             while (r > 1) {
-
-                std::uniform_int_distribution<int> k_dist(q[0] - r, q[0] + r);
-                std::uniform_int_distribution<int> l_dist(q[1] - r, q[1] + r);
-
-                int k = k_dist(generator);
-                int l = l_dist(generator);
-
-                Vec2i new_q(k, l);
+                Vec2i new_q = t.pick_random_in_window(generator, q, r);
 
                 if (t.contains_patch(new_q)) {
                     int d = patch_distance(p, new_q);
