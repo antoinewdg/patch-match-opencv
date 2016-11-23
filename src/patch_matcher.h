@@ -86,21 +86,12 @@ namespace pm {
 
         distance_type _propagate_distance(const Vec2i &p, const Vec2i &n, int max_d) {
 
-            // Check that neighbor is not out of bounds of the source image
-            const int P = DistanceFunction::patch_size;
-            if (n[0] < P / 2 || n[1] < P / 2
-                || n[0] >= offset_map.rows - (P / 2)
-                || n[1] >= offset_map.cols - (P / 2)) {
+            if (!s.contains_patch(n)) {
                 return std::numeric_limits<distance_type>::max();
             }
 
             Vec2i q = offset_map(n) + p;
-
-            // Check that q is inside the bounds of the target image
-            if (q[0] < 0 || q[1] < 0
-                || q[0] >= t.size().height + (P / 2)
-                || q[1] >= t.size().width + (P / 2)
-                || !t.contains_patch(q)) {
+            if (!t.contains_patch(q)) {
                 return std::numeric_limits<distance_type>::max();
             }
             return patch_distance(p, q, max_d);
@@ -133,15 +124,9 @@ namespace pm {
                 int k = k_dist(generator);
                 int l = l_dist(generator);
 
-                // Check that the new_q is inside the bounds of the target image
-                if (k < p_2 || k >= t.size().height - p_2 ||
-                    l < p_2 || l >= t.size().width - p_2) {
-                    r /= 2;
-                    continue;
-                }
                 Vec2i new_q(k, l);
 
-                if (t.contains_patch(new_q) && new_q != q) {
+                if (t.contains_patch(new_q)) {
                     int d = patch_distance(p, new_q);
                     if (d < min_d) {
                         offset_map(p) = new_q - p;

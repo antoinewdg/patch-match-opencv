@@ -54,12 +54,14 @@ namespace pm {
         }
 
         inline bool contains_patch(const Vec2i &p) const {
-            return true;
+            return p[0] >= m_begin[0] && p[0] < m_end[0] &&
+                   p[1] >= m_begin[1] && p[1] < m_end[1];
         }
 
     private:
         Vec2i m_begin, m_end;
         Size m_size;
+        int half_p;
     };
 }
 

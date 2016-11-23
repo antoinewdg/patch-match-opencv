@@ -25,7 +25,8 @@ namespace pm {
         typedef vector<Vec2i>::const_iterator const_iterator;
         typedef vector<Vec2i>::const_reverse_iterator const_reverse_iterator;
 
-        MaskedPatches(const Mat_<bool> mask, int P) : P(P), patches_mask(mask.size(), false) {
+        MaskedPatches(const Mat_<bool> mask, int P) :
+                P(P), patches_mask(mask.size(), false), half_p(P/2) {
             int p_2 = P / 2;
             Predicate predicate;
             for (int i = p_2; i < mask.rows - p_2; i++) {
@@ -63,11 +64,13 @@ namespace pm {
         }
 
         bool contains_patch(const Vec2i &p) {
-            return patches_mask(p);
+            return p[0] >= half_p && p[0] <= patches_mask.rows - half_p &&
+                   p[1] >= half_p && p[1] <= patches_mask.cols - half_p &&
+                   patches_mask(p);
         }
 
     private:
-        int P;
+        int P, half_p;
         Mat_<bool> patches_mask;
         vector<Vec2i> patches;
     };
@@ -90,8 +93,6 @@ namespace pm {
 
     typedef MaskedPatches<AtLeastOneInPatch> PartiallyMaskedPatches;
     typedef MaskedPatches<AllInPatch> TotallyMaskedPatches;
-
-
 
 
 }
