@@ -20,6 +20,11 @@ set(TEST_FILES
         test/test_patch_matcher.cpp
         test/patch_servers/test_whole_image_patches.cpp
         test/patch_servers/test_masked_patches.cpp
+        test/dummies/patch_servers.h
+        test/dummies/structs.h
+        test/dummies/dummy_iterator.h
+        test/dummies/distance.h
+        test/dummies/maps.h
         )
 
 

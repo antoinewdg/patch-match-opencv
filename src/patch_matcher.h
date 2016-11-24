@@ -28,6 +28,7 @@ namespace pm {
         typedef typename SourcePatches::patch_type s_patch_type;
         typedef typename TargetPatches::patch_type t_patch_type;
         typedef typename OffsetMap::offset_type offset_type;
+        typedef typename TargetPatches::window_size_type window_size_type;
 
 
         PatchMatcher(const SourcePatches &s, const TargetPatches &t,
@@ -95,11 +96,11 @@ namespace pm {
         void _propagate(const s_patch_type &p,
                         const typename SourcePatches::predecessors_type &neighbors) {
             t_patch_type q = offset_map.from_offset(p, offset_map(p));
-            int &min_d = distance_map(p);
+            distance_type &min_d = distance_map(p);
 
             for (const s_patch_type &n : neighbors) {
-                int d = _propagate_distance(p, n, min_d);
-                if (d <= min_d) {
+                distance_type d = _propagate_distance(p, n, min_d);
+                if (d < min_d) {
                     min_d = d;
                     offset_map(p) = offset_map(n);
                 }
@@ -108,14 +109,14 @@ namespace pm {
 
         void _random_search(const s_patch_type &p) {
             t_patch_type q = offset_map.from_offset(p, offset_map(p));
-            int r = t.get_max_window_size(q);
-            int &min_d = distance_map(p);
+            window_size_type r = t.get_max_window_size(q);
+            distance_type &min_d = distance_map(p);
 
             while (r >= 1) {
                 t_patch_type new_q = t.pick_random_in_window(generator, q, r);
 
                 if (t.contains_patch(new_q)) {
-                    int d = patch_distance(p, new_q);
+                    distance_type d = patch_distance(p, new_q);
                     if (d < min_d) {
                         offset_map(p) = offset_map.to_offset(p, new_q);
                     }
