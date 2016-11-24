@@ -5,15 +5,10 @@
 #ifndef PATCH_MATCH_PATCH_MATCHER_H
 #define PATCH_MATCH_PATCH_MATCHER_H
 
-#include <array>
 #include <random>
 
 namespace pm {
 
-    using cv::Vec2i;
-    using cv::Vec3b;
-    using cv::Mat_;
-    using std::array;
 
     template<class SourcePatches, class TargetPatches,
             class DistanceFunction>
@@ -95,15 +90,16 @@ namespace pm {
             return patch_distance(p, q, max_d);
         }
 
-        void _propagate(const s_patch_type &p, const array<Vec2i, 2> &neighbors) {
+        void _propagate(const s_patch_type &p,
+                        const typename SourcePatches::predecessors_type &neighbors) {
             t_patch_type q = offset_map.from_offset(p, offset_map(p));
             int &min_d = distance_map(p);
 
-            for (int n = 0; n < neighbors.size(); n++) {
-                int d = _propagate_distance(p, neighbors[n], min_d);
+            for (const s_patch_type  &n : neighbors) {
+                int d = _propagate_distance(p, n, min_d);
                 if (d <= min_d) {
                     min_d = d;
-                    offset_map(p) = offset_map(neighbors[n]);
+                    offset_map(p) = offset_map(n);
                 }
             }
         }
@@ -130,7 +126,7 @@ namespace pm {
 
         void _iterate_rd() {
             for (const s_patch_type &p : s) {
-                _propagate(p, {p - Vec2i(1, 0), p - Vec2i(0, 1)});
+                _propagate(p, s.get_regular_predecessors(p));
                 _random_search(p);
             }
         }
@@ -139,7 +135,7 @@ namespace pm {
             auto it = s.rbegin();
             for (; it != s.rend(); it++) {
                 const s_patch_type &p = *it;
-                _propagate(p, {p + Vec2i(1, 0), p + Vec2i(0, 1)});
+                _propagate(p, s.get_reverse_predecessors(p));
                 _random_search(p);
             }
         }

@@ -5,9 +5,11 @@
 #ifndef PATCH_MATCH_WHOLE_IMAGE_PATCHES_H
 #define PATCH_MATCH_WHOLE_IMAGE_PATCHES_H
 
+#include <array>
+#include <random>
+
 #include <boost/iterator/iterator_facade.hpp>
 #include <opencv2/core/core.hpp>
-#include <random>
 
 #include "pixel_iterators.h"
 
@@ -23,6 +25,7 @@ namespace pm {
         typedef ConstReversePixelIterator const_reverse_iterator;
         typedef Vec2i patch_type;
         typedef int window_size_type;
+        typedef std::array<patch_type, 2> predecessors_type;
 
         WholeImagePatches(const Size &size, int P) :
                 m_begin(P / 2, P / 2),
@@ -77,6 +80,14 @@ namespace pm {
             return std::max({m_end[0] - c[0], m_end[1] - c[1],
                              c[0] - m_begin[0], c[1] - m_begin[1]});
         }
+
+        inline predecessors_type get_regular_predecessors(const patch_type &p) const{
+            return {p - Vec2i(1, 0), p - Vec2i(0, 1)};
+        };
+
+        inline predecessors_type get_reverse_predecessors(const patch_type &p) const{
+            return {p + Vec2i(1, 0), p + Vec2i(0, 1)};
+        };
 
 
     private:

@@ -70,4 +70,24 @@ TEST_CASE("WholeImagePatches 8x10 with P=5") {
         }
     }
 
+    SECTION("get_regular_predecessors") {
+        std::array<Vec2i, 2> expected;
+
+        expected = {Vec2i(1, 2), Vec2i(2, 1)};
+        REQUIRE(patches.get_regular_predecessors(Vec2i(2, 2)) == expected);
+
+        expected = {Vec2i(4, 4), Vec2i(5, 3)};
+        REQUIRE(patches.get_regular_predecessors(Vec2i(5, 4)) == expected);
+    }
+
+    SECTION("get_reverse_predecessors") {
+        std::array<Vec2i, 2> expected;
+
+        expected = {Vec2i(3, 2), Vec2i(2, 3)};
+        REQUIRE(patches.get_reverse_predecessors(Vec2i(2, 2)) == expected);
+
+        expected = {Vec2i(6, 4), Vec2i(5, 5)};
+        REQUIRE(patches.get_reverse_predecessors(Vec2i(5, 4)) == expected);
+    }
+
 }
