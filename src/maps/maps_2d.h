@@ -11,6 +11,7 @@ namespace pm {
 
     using cv::Vec2i;
     using cv::Mat_;
+    using cv::Size;
 
     class OffsetMap2D {
     public:
@@ -19,8 +20,7 @@ namespace pm {
         typedef Vec2i t_patch_type;
         typedef Vec2i offset_type;
 
-        template<class T, class U>
-        OffsetMap2D(T s, U t) : m_data(s.size()) {}
+        OffsetMap2D(Size size) : m_data(size) {}
 
         inline offset_type to_offset(const s_patch_type &p, const t_patch_type &q) {
             return q - p;
@@ -54,8 +54,7 @@ namespace pm {
         typedef Vec2i patch_type;
         typedef T distance_type;
 
-        template<class U, class V>
-        DistanceMap2d(const U &s, const V &t) : m_data(s.size()) {}
+        DistanceMap2d(Size size) : m_data(size) {}
 
         inline distance_type operator()(const patch_type &p) const {
             return m_data(p);

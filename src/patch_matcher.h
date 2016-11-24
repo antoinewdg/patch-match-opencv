@@ -31,10 +31,12 @@ namespace pm {
 
 
         PatchMatcher(const SourcePatches &s, const TargetPatches &t,
-                     const DistanceFunction &patch_distance, unsigned int seed = 0) :
+                     const DistanceFunction &patch_distance,
+                     const OffsetMap &offset_map, const DistanceMap &distance_map,
+                     unsigned int seed = 0) :
                 s(s), t(t),
                 patch_distance(patch_distance),
-                offset_map(s, t), distance_map(s, t) {
+                offset_map(offset_map), distance_map(distance_map) {
             if (seed == 0) {
                 std::random_device r;
                 seed = r();
@@ -95,7 +97,7 @@ namespace pm {
             t_patch_type q = offset_map.from_offset(p, offset_map(p));
             int &min_d = distance_map(p);
 
-            for (const s_patch_type  &n : neighbors) {
+            for (const s_patch_type &n : neighbors) {
                 int d = _propagate_distance(p, n, min_d);
                 if (d <= min_d) {
                     min_d = d;
