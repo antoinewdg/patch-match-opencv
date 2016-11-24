@@ -27,7 +27,7 @@ namespace pm {
         WholeImagePatches(const Size &size, int P) :
                 m_begin(P / 2, P / 2),
                 m_end(size.height - P / 2, size.width - P / 2),
-                m_size(size.width - P + 1, size.height - P + 1),
+                m_size(size),
                 i_dist(m_begin[0], m_end[0] - 1),
                 j_dist(m_begin[1], m_end[1] - 1) {
 

@@ -11,6 +11,7 @@ set(SOURCE_FILES
         src/patch_servers/masked_patches.h
         src/patch_matcher.h
         src/patch_matcher_utils.h
+        src/maps/maps_2d.h
         )
 
 set(TEST_FILES

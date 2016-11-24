@@ -24,6 +24,7 @@ namespace pm {
         typedef I input_type;
         typedef O output_type;
         typedef Mat_<Vec<I, n_channels>> mat_type;
+
         static constexpr int patch_size = P;
 
         EuclidianSquaredDistance(const mat_type &a, const mat_type &b) :
