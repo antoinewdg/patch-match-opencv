@@ -42,7 +42,7 @@ namespace pm {
 
         PatchMatcher(const SourcePatches &s, const TargetPatches &t,
                      const DistanceFunction &patch_distance,
-                     const OffsetMap &offset_map, const DistanceMap &distance_map,
+                     OffsetMap &offset_map, DistanceMap &distance_map,
                      unsigned int seed = 0) :
                 s(s), t(t),
                 patch_distance(patch_distance),
@@ -77,14 +77,6 @@ namespace pm {
             distance_map(p) = patch_distance(p, offset_map.from_offset(p, offset));
         }
 
-        const OffsetMap &get_offset_map() const {
-            return offset_map;
-        }
-
-
-        const DistanceMap &get_distance_map() const {
-            return distance_map;
-        }
 
 
     private:
@@ -156,8 +148,8 @@ namespace pm {
         SourcePatches s;
         TargetPatches t;
         std::default_random_engine generator;
-        OffsetMap offset_map;
-        DistanceMap distance_map;
+        OffsetMap& offset_map;
+        DistanceMap& distance_map;
 
     };
 }
