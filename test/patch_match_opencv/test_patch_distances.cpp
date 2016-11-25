@@ -1,9 +1,9 @@
 #include "catch.hpp"
 
-#include "patch_distances.h"
+#include "patch_match_opencv/patch_distances.h"
 #include "test_utils.h"
 
-using namespace pm;
+using namespace pm::opencv;
 
 using cv::Vec3b;
 

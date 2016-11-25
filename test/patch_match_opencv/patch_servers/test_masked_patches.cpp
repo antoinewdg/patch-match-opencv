@@ -2,10 +2,10 @@
 
 #include "catch.hpp"
 
-#include "patch_servers/masked_patches.h"
+#include "patch_match_opencv/patch_servers/masked_patches.h"
 #include "test_utils.h"
 
-using namespace pm;
+using namespace pm::opencv;
 
 using std::string;
 

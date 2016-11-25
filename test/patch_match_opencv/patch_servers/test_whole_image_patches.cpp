@@ -1,11 +1,11 @@
 #include "catch.hpp"
 
-#include "patch_servers/whole_image_patches.h"
+#include "patch_match_opencv/patch_servers/whole_image_patches.h"
 #include "test_utils.h"
 
 #include <iostream>
 
-using namespace pm;
+using namespace pm::opencv;
 
 using cv::Mat_;
 
