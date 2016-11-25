@@ -1,6 +1,6 @@
 #include "catch.hpp"
 
-#include "patch_match_opencv/patch_distances.h"
+#include "../../include/patch_match_opencv/distances/euclidian.h"
 #include "test_utils.h"
 
 using namespace pm::opencv;

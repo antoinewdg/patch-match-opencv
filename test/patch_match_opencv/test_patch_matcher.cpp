@@ -2,9 +2,7 @@
 
 #include "iostream"
 #include "patch_match_core/patch_matcher.h"
-#include "patch_match_opencv/patch_servers/whole_image_patches.h"
-#include "patch_match_opencv/patch_distances.h"
-#include "patch_match_opencv/maps/maps_2d.h"
+#include "patch_match_opencv/adapters.h"
 #include "test_utils.h"
 
 
