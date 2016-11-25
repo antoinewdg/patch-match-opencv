@@ -9,7 +9,6 @@ namespace pm {
     namespace dummies {
 
         class SourcePatch {};
-        class SourceWindowSize {};
 
         class TargetPatch {};
         class TargetWindowSize {};
