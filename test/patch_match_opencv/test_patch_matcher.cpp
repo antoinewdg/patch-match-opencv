@@ -67,3 +67,55 @@ TEST_CASE("PatchMatcher on simple translation") {
 
 }
 
+
+TEST_CASE("PatchMatcher compared to exhaustive search") {
+    typedef EuclidianSquaredDistance<5, uchar, int, 3> DistanceType;
+    typedef PatchMatcher<WholeImagePatches, WholeImagePatches, DistanceType,
+            OffsetMap2D, DistanceMap2d<int>> MatcherType;
+
+    auto source = load_test_asset("patch_matcher/lena_32_a.png");
+    auto target = load_test_asset("patch_matcher/lena_32_b.png");
+    WholeImagePatches s_server(source.size(), 5);
+    WholeImagePatches t_server(target.size(), 5);
+    DistanceType distance(source, target);
+
+    OffsetMap2D offset_map(source.size());
+    DistanceMap2d<int> distance_map(target.size());
+    MatcherType matcher(s_server, t_server, distance,
+                        offset_map, distance_map, 7854);
+
+    Mat_<Vec2i> exhaustive_offsets(source.size());
+    Mat_<int> exhaustive_distances(source.size(), std::numeric_limits<int>::max());
+
+    int max_d = -1;
+    for (auto p : s_server) {
+        bool found = false;
+        for (auto q : t_server) {
+            int d = distance(p, q);
+            if (d < exhaustive_distances(p)) {
+                found = true;
+                exhaustive_offsets(p) = q - p;
+                exhaustive_distances(p) = d;
+            }
+            if (d > max_d) {
+                max_d = d;
+            }
+        }
+    }
+
+    cv::Rect r(2, 2, 28, 28);
+    matcher.initialize_offset_map_randomly();
+
+
+    auto diff = exhaustive_distances(r) - distance_map.to_mat()(r);
+    auto initial_error = cv::norm(diff, cv::NORM_L2) / (28 * 28);
+
+    matcher.iterate_n_times(5);
+    diff = exhaustive_distances(r) - distance_map.to_mat()(r);
+    auto new_error = cv::norm(diff, cv::NORM_L2) / (28 * 28);
+
+    /*
+     * This is an ad-hoc result, may be completely stupid.
+     */
+    REQUIRE((initial_error / new_error) > 40);
+}

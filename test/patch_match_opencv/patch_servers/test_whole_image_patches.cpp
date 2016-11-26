@@ -17,8 +17,12 @@ TEST_CASE("WholeImagePatches 8x10 with P=5") {
         auto it = patches.begin();
         for (int i = 2; i < 10 - 2; i++) {
             for (int j = 2; j < 8 - 2; j++) {
-                REQUIRE(*it == Vec2i(i, j));
-                REQUIRE(patches.contains_patch(Vec2i(i, j)));
+                if(*it != Vec2i(i, j) ){
+                    FAIL("Unexpected patch at position "<< Vec2i(i,j));
+                }
+                if(!patches.contains_patch(*it)){
+                    FAIL("Patch server should contain " << Vec2i(i,j));
+                }
                 it++;
             }
         }
@@ -29,7 +33,9 @@ TEST_CASE("WholeImagePatches 8x10 with P=5") {
         auto it = patches.rbegin();
         for (int i = 10 - 2 - 1; i >= 2; i--) {
             for (int j = 8 - 2 - 1; j >= 2; j--) {
-                REQUIRE(*it == Vec2i(i, j));
+                if(*it != Vec2i(i, j) ){
+                    FAIL("Unexpected patch at position "<< Vec2i(i,j));
+                }
                 it++;
             }
         }
