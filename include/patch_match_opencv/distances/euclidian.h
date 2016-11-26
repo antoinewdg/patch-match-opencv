@@ -31,8 +31,11 @@ namespace pm {
                     m_a(a), m_b(b) {
             }
 
-            inline output_type operator()(const Vec2i &p, const Vec2i &q,
-                                          output_type max_d = std::numeric_limits<output_type>::max()) {
+            inline output_type operator()(const Vec2i &p, const Vec2i &q) {
+                return _sq_euclidian_distance(m_a(_get_subrect(p)), m_b(_get_subrect(q)));
+            }
+
+            inline output_type operator()(const Vec2i &p, const Vec2i &q, output_type max_d) {
                 return _sq_euclidian_distance(
                         m_a(_get_subrect(p)),
                         m_b(_get_subrect(q)),
@@ -45,6 +48,23 @@ namespace pm {
             inline Rect _get_subrect(const Vec2i &p) {
                 return Rect(p[1] - P / 2, p[0] - P / 2, P, P);
             }
+
+            inline output_type _sq_euclidian_distance(const mat_type &s, const mat_type &t) {
+                output_type d = output_type(0);
+
+                for (int i = 0; i < P; i++) {
+                    for (int j = 0; j < P; j++) {
+
+                        for (int k = 0; k < 3; k++) {
+                            output_type temp = output_type(s(i, j)[k] - t(i, j)[k]);
+                            d += temp * temp;
+                        }
+                    }
+                }
+
+                return d;
+            }
+
 
             inline output_type _sq_euclidian_distance(const mat_type &s, const mat_type &t, output_type max_d) {
                 output_type d = output_type(0);
