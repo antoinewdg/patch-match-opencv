@@ -9,6 +9,7 @@ set(SOURCE_FILES
         include/patch_match_opencv/patch_servers/pixel_iterators.h
         include/patch_match_opencv/patch_servers/whole_image_patches.h
         include/patch_match_opencv/patch_servers/masked_patches.h
+        include/patch_match_opencv/patch_servers/base_patch_server.h
         include/patch_match_opencv/maps/distance_map_2d.h
         include/patch_match_opencv/maps/offset_map_2d.h
         include/patch_match_opencv/adapters.h

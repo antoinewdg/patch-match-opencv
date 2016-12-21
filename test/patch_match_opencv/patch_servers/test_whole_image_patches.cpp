@@ -63,7 +63,7 @@ TEST_CASE("WholeImagePatches 8x10 with P=5") {
 
     SECTION("get_max_window_size") {
         REQUIRE(patches.get_max_window_size(Vec2i(2, 2)) == 6);
-        REQUIRE(patches.get_max_window_size(Vec2i(5, 4)) == 3);
+        REQUIRE(patches.get_max_window_size(Vec2i(5, 4)) == 4);
     }
 
     SECTION("pick_random_in_window") {
